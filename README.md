@@ -93,13 +93,15 @@ ANTHROPIC_API_KEY=...
 ANTHROPIC_MODEL=claude-3-5-sonnet-20240620
 ```
 
-## Architecture (Mermaid)
+## Architecture
+```mermaid
 flowchart LR
   A[Docs in data/raw] -->|embed| B[FAISS Index]
   Q[User question] --> C[Agent Planner]
   B --> C
   C --> D[LLM (Local/OpenAI/Anthropic)]
   D --> E[Answer + Sources]
+```
 
 
 ## Local-only usage (no API keys)
