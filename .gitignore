@@ -44,4 +44,4 @@ tmp/
 .env.*
 **/.env
 **/*.env
-!/.env.example   # keep the example env tracked
+!.env.example   # keep the example env tracked
