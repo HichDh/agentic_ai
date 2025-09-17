@@ -100,8 +100,7 @@ flowchart LR
   Q[User question] --> C[Agent Planner]
   B --> C
   C --> D[LLM (Local/OpenAI/Anthropic)]
-  D --> E[Answer + Sources]
-```<code>
+  D --> E[Answer + Sources]<code>
 
 
 ## Local-only usage (no API keys)
