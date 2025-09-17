@@ -1,0 +1,36 @@
+# Python build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDEs / Editors
+.vscode/
+.idea/
+
+# Logs / Temp
+*.log
+logs/
+tmp/
+
+# Secrets
+.env
+.env.*
+!/.env.example   # keep the example in repo
+
+# Data / Indexes / Checkpoints
+data/
+checkpoints/
+outputs/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/

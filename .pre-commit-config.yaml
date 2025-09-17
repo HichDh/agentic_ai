@@ -1,0 +1,19 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: local
+    hooks:
+      - id: deny-env-files
+        name: Prevent committing .env files
+        entry: bash -c 'git diff --cached --name-only | grep -E "(^|/)\.env($|\.|/)" && { echo "❌ .env detected in staged files"; exit 1; } || exit 0'
+        language: system
+
+      - id: forbid-secrets
+        name: Prevent committing API keys
+        entry: bash -c 'git diff --cached | grep -E "(?i)(sk-[A-Za-z0-9]{20,}|api[_-]?key|OPENAI_API_KEY|ANTHROPIC_API_KEY|AWS_SECRET_ACCESS_KEY|GH_TOKEN)" -q && { echo "❌ Possible secret in staged changes"; exit 1; } || exit 0'
+        language: system

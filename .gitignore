@@ -1,0 +1,47 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- IDEs / Editors ---
+.vscode/
+
+# --- Jupyter / Streamlit ---
+.ipynb_checkpoints/
+.streamlit/
+
+# --- Data & Indexes ---
+data/raw/
+data/index*
+data/**/*.faiss
+data/**/*.json
+data/**/*.pkl
+data/**/*.bin
+checkpoints/
+outputs/
+
+# --- Logs / Temp ---
+*.log
+logs/
+tmp/
+.DS_Store
+
+# --- Secrets (ANYWHERE in the tree) ---
+*.env
+.env
+.env.*
+**/.env
+**/*.env
+!/.env.example   # keep the example env tracked

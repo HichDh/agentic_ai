@@ -1,0 +1,2 @@
+{"instruction":"Answer about this repo","input":"What is agentic RAG?","output":"Agentic RAG combines retrieval with agent-style tool use and planning to ground answers."}
+{"instruction":"Summarize","input":"Explain LoRA in one sentence.","output":"LoRA fine-tunes large models by training small low-rank adapters while freezing most weights."}
