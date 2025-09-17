@@ -99,7 +99,7 @@ flowchart LR
   A[Docs in data/raw] -->|embed| B[FAISS Index]
   Q[User question] --> C[Agent Planner]
   B --> C
-  C --> D[LLM (Local/OpenAI/Anthropic)]
+  C --> D["LLM (Local / OpenAI / Anthropic)"]
   D --> E[Answer + Sources]
 ```
 
