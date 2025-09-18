@@ -140,6 +140,10 @@ streamlit run streamlit_app.py
 agentic-ai eval --dataset hotpot_qa --split validation --limit 50 --k 5
 ```
 
+## Linter 
+```bash
+autoflake -r -i --remove-all-unused-imports --remove-unused-variables src && isort . && black . && flake8
+```
 
 📝 To-Dos / Roadmap
 

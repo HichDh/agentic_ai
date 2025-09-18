@@ -27,9 +27,9 @@ class FaissStore:
 
     def search(self, query_emb: np.ndarray, k: int) -> List[Tuple[Doc, float]]:
         faiss.normalize_L2(query_emb)
-        D, I = self.index.search(query_emb.astype(np.float32), k)
+        D, idxs = self.index.search(query_emb.astype(np.float32), k)
         results: List[Tuple[Doc, float]] = []
-        for idx, score in zip(I[0], D[0]):
+        for idx, score in zip(idxs[0], D[0]):
             if idx == -1:
                 continue
             results.append((self.docs[idx], float(score)))
