@@ -1,6 +1,7 @@
 import streamlit as st
-from agentic_ai.retriever import Retriever
+
 from agentic_ai.agent import Agent
+from agentic_ai.retriever import Retriever
 
 st.set_page_config(page_title="agentic_ai - RAG Demo", layout="wide")
 st.title("agentic_ai — Local RAG Demo")
@@ -22,7 +23,7 @@ if st.button("Ask"):
     st.subheader("Answer")
     st.write(res["answer"])
     st.subheader("Sources")
-    for i,s in enumerate(res["sources"],1):
+    for i, s in enumerate(res["sources"], 1):
         st.markdown(f"**[{i}]** `{s['meta'].get('path','?')}` — score={s['score']:.3f}")
         with st.expander(f"Preview {i}"):
             st.write(s["text"])

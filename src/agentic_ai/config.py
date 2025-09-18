@@ -1,7 +1,8 @@
+import os
 from pathlib import Path
+
 from pydantic import BaseModel, Field
 
-import os
 
 class Settings(BaseModel):
     # Paths
@@ -15,10 +16,14 @@ class Settings(BaseModel):
     # Retrieval
     top_k: int = 5
     backend: str = os.getenv("BACKEND", "local")
-    system_prompt: str = os.getenv("SYSTEM_PROMPT", "You are a precise assistant. Use the provided sources. Cite as [Source i].")
+    system_prompt: str = os.getenv(
+        "SYSTEM_PROMPT",
+        "You are a precise assistant. Use the provided sources. Cite as [Source i].",
+    )
     # LoRA
     lora_r: int = 16
     lora_alpha: int = 32
     lora_dropout: float = 0.05
+
 
 settings = Settings()

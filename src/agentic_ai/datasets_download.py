@@ -1,18 +1,23 @@
 # src/agentic_ai/datasets_download.py
 from __future__ import annotations
-import os, re
+
+import re
 from pathlib import Path
-from typing import Literal, Iterable
+from typing import Iterable, Literal
+
 from datasets import load_dataset
 from rich import print
 
 DATA_DIR = Path("data/raw")
 
+
 def _sanitize(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
+
 def _safe_name(s: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", s)[:60] or "doc"
+
 
 def _write_docs(docs: Iterable[tuple[str, str]], prefix: str):
     out_dir = DATA_DIR / prefix
@@ -21,11 +26,16 @@ def _write_docs(docs: Iterable[tuple[str, str]], prefix: str):
     for i, (title, text) in enumerate(docs):
         if not text:
             continue
-        (out_dir / f"{i:05d}_{_safe_name(title)}.txt").write_text(text, encoding="utf-8")
+        (out_dir / f"{i:05d}_{_safe_name(title)}.txt").write_text(
+            text, encoding="utf-8"
+        )
         count += 1
     print(f":white_check_mark: Wrote {count} docs to {out_dir}")
 
-def download(dataset: Literal["hotpot_qa","squad_v2"], split: str = "train", limit: int = 1000):
+
+def download(
+    dataset: Literal["hotpot_qa", "squad_v2"], split: str = "train", limit: int = 1000
+):
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     if dataset == "hotpot_qa":
         ds = load_dataset("hotpot_qa", "distractor", split=split)
@@ -63,10 +73,12 @@ def download(dataset: Literal["hotpot_qa","squad_v2"], split: str = "train", lim
     else:
         raise ValueError("Unsupported dataset")
 
+
 if __name__ == "__main__":
     import argparse
+
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", choices=["hotpot_qa","squad_v2"], default="hotpot_qa")
+    ap.add_argument("--dataset", choices=["hotpot_qa", "squad_v2"], default="hotpot_qa")
     ap.add_argument("--split", default="train")
     ap.add_argument("--limit", type=int, default=1000)
     args = ap.parse_args()

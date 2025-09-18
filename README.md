@@ -10,7 +10,6 @@ Retrieval-Augmented Generation with agent workflows
 - Clean, modular code (type hints, tests, docs)
 - A real RAG pipeline (embeddings → vector database (FAISS) → retrieval)
 - An *agentic* orchestration layer (tools + planner + tracer)
-- LoRA fine‑tuning script with PEFT + Transformers
 - CLI and FastAPI app with endpoints for indexing and querying
 - GitHub Actions CI (lint + tests)
 

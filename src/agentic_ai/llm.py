@@ -1,8 +1,13 @@
 from __future__ import annotations
+
+import os
 from typing import Optional
-import os, torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
+
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
 from .config import settings
+
 
 class LocalGenerator:
     def __init__(self, model_name: Optional[str] = None, device: Optional[str] = None):
@@ -11,20 +16,26 @@ class LocalGenerator:
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
-            dtype=torch.float16 if self.device == "cuda" else torch.float32
+            dtype=torch.float16 if self.device == "cuda" else torch.float32,
         ).to(self.device)
 
     def chat(self, system: str, user: str, max_new_tokens: int = 256) -> str:
         prompt = f"<|system|>\n{system}\n<|user|>\n{user}\n<|assistant|>\n"
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
         with torch.no_grad():
-            out = self.model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=True, temperature=0.3)
+            out = self.model.generate(
+                **inputs, max_new_tokens=max_new_tokens, do_sample=True, temperature=0.3
+            )
         text = self.tokenizer.decode(out[0], skip_special_tokens=True)
-        return text.split("<|assistant|>")[-1].strip() if "<|assistant|>" in text else text
+        return (
+            text.split("<|assistant|>")[-1].strip() if "<|assistant|>" in text else text
+        )
+
 
 class OpenAIBackend:
     def __init__(self):
         from openai import OpenAI
+
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
@@ -32,15 +43,20 @@ class OpenAIBackend:
         # Using the Responses API (new SDK)
         rsp = self.client.chat.completions.create(
             model=self.model,
-            messages=[{"role":"system","content":system},{"role":"user","content":user}],
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
             temperature=0.3,
             max_tokens=max_new_tokens,
         )
         return rsp.choices[0].message.content
 
+
 class AnthropicBackend:
     def __init__(self):
         import anthropic
+
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.model = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20240620")
 
@@ -49,10 +65,11 @@ class AnthropicBackend:
             model=self.model,
             system=system,
             max_tokens=max_new_tokens,
-            messages=[{"role":"user","content":user}],
+            messages=[{"role": "user", "content": user}],
             temperature=0.3,
         )
-        return "".join([b.text for b in msg.content if b.type=="text"])
+        return "".join([b.text for b in msg.content if b.type == "text"])
+
 
 class ProviderRouter:
     def __init__(self, backend: Optional[str] = None):

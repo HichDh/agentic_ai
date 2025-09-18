@@ -1,15 +1,19 @@
 from __future__ import annotations
+
+import json
 from dataclasses import dataclass
-from typing import List, Dict, Tuple
-import faiss, json, os
+from typing import Dict, List, Tuple
+
+import faiss
 import numpy as np
-from .config import settings
+
 
 @dataclass
 class Doc:
     id: str
     text: str
     meta: Dict
+
 
 class FaissStore:
     def __init__(self, dim: int):

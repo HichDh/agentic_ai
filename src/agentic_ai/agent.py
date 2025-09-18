@@ -1,14 +1,18 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import List, Dict, Any
-from .retriever import Retriever
-from .llm import ProviderRouter
+from typing import Any, Dict
+
 from .config import settings
+from .llm import ProviderRouter
+from .retriever import Retriever
+
 
 @dataclass
 class ToolResult:
     name: str
     payload: Dict[str, Any]
+
 
 class Agent:
     def __init__(self):
@@ -17,9 +21,13 @@ class Agent:
 
     def _tool_retrieve(self, question: str, k: int) -> ToolResult:
         hits = self.retriever.retrieve(question, k=k)
-        sources = [{"score": s, "text": d.text[:400], "meta": d.meta} for d,s in hits]
-        context = "\n\n".join([f"[Source {i}] {s['text']}" for i,s in enumerate(sources, 1)])
-        return ToolResult(name="retrieve", payload={"context": context, "sources": sources})
+        sources = [{"score": s, "text": d.text[:400], "meta": d.meta} for d, s in hits]
+        context = "\n\n".join(
+            [f"[Source {i}] {s['text']}" for i, s in enumerate(sources, 1)]
+        )
+        return ToolResult(
+            name="retrieve", payload={"context": context, "sources": sources}
+        )
 
     def ask(self, question: str, k: int = 5) -> Dict[str, Any]:
         # Plan → Retrieve → Synthesize (simple, explicit chain for readability)

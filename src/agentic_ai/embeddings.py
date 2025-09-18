@@ -1,7 +1,10 @@
 from typing import List
-from sentence_transformers import SentenceTransformer
+
 import numpy as np
+from sentence_transformers import SentenceTransformer
+
 from .config import settings
+
 
 class Embedder:
     def __init__(self, model_name: str | None = None, device: str | None = None):
@@ -10,4 +13,6 @@ class Embedder:
         self.model = SentenceTransformer(self.model_name, device=self.device)
 
     def encode(self, texts: List[str]) -> np.ndarray:
-        return np.asarray(self.model.encode(texts, normalize_embeddings=True, convert_to_numpy=True))
+        return np.asarray(
+            self.model.encode(texts, normalize_embeddings=True, convert_to_numpy=True)
+        )

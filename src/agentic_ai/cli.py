@@ -1,10 +1,13 @@
 from __future__ import annotations
-import typer, json
+
+import typer
 from rich import print
-from .retriever import Retriever
+
 from .agent import Agent
+from .retriever import Retriever
 
 app = typer.Typer(help="Agentic RAG CLI")
+
 
 @app.command()
 def index(folder: str = "data/raw"):
@@ -12,14 +15,16 @@ def index(folder: str = "data/raw"):
     r.index_folder(folder)
     print(":white_check_mark: [bold]Indexed[/bold]")
 
+
 @app.command()
 def ask(question: str, k: int = 5):
     agent = Agent()
     res = agent.ask(question, k=k)
     print("\n[bold]Answer[/bold]:", res["answer"])
     print("\n[bold]Sources[/bold]:")
-    for i,s in enumerate(res["sources"], 1):
+    for i, s in enumerate(res["sources"], 1):
         print(f"[{i}] {s['meta'].get('path','?')} (score={s['score']:.3f})")
+
 
 if __name__ == "__main__":
     app()
@@ -27,10 +32,13 @@ if __name__ == "__main__":
 
 from .datasets_download import download as _download
 
+
 @app.command()
-def download(dataset: str = typer.Option("hotpot_qa", help="hotpot_qa | squad_v2"),
-             split: str = typer.Option("train"),
-             limit: int = typer.Option(1000, help="Max examples to ingest as docs")):
+def download(
+    dataset: str = typer.Option("hotpot_qa", help="hotpot_qa | squad_v2"),
+    split: str = typer.Option("train"),
+    limit: int = typer.Option(1000, help="Max examples to ingest as docs"),
+):
     """
     Download a public dataset (no API keys), convert to text docs under data/raw/<dataset>/
     """
@@ -39,11 +47,14 @@ def download(dataset: str = typer.Option("hotpot_qa", help="hotpot_qa | squad_v2
 
 from .eval import evaluate as _evaluate
 
+
 @app.command()
-def eval(dataset: str = typer.Option("hotpot_qa", help="hotpot_qa | squad_v2"),
-         split: str = typer.Option("validation"),
-         limit: int = typer.Option(50),
-         k: int = typer.Option(5)):
+def eval(
+    dataset: str = typer.Option("hotpot_qa", help="hotpot_qa | squad_v2"),
+    split: str = typer.Option("validation"),
+    limit: int = typer.Option(50),
+    k: int = typer.Option(5),
+):
     """
     Run a lightweight evaluation (no labels) to approximate groundedness & citation discipline.
     """
