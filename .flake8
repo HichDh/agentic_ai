@@ -2,8 +2,8 @@
 [flake8]
 max-line-length = 100
 extend-ignore =
-    E203,  # whitespace before ':' (Black-compatible)
-    W503   # line break before binary operator (Black-compatible)
+    E203,
+    W503
 exclude =
     .venv,
     venv,

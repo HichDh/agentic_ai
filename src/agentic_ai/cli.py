@@ -27,7 +27,7 @@ def ask(question: str, k: int = 5):
     print("\n[bold]Answer[/bold]:", res["answer"])
     print("\n[bold]Sources[/bold]:")
     for i, s in enumerate(res["sources"], 1):
-        print(f"[{i}] {s['meta'].get('path','?')} (score={s['score']:.3f})")
+        print(f"[{i}] {s['meta'].get('path', '?')} (score={s['score']:.3f})")
 
 
 @app.command()

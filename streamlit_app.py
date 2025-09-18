@@ -24,6 +24,8 @@ if st.button("Ask"):
     st.write(res["answer"])
     st.subheader("Sources")
     for i, s in enumerate(res["sources"], 1):
-        st.markdown(f"**[{i}]** `{s['meta'].get('path','?')}` — score={s['score']:.3f}")
+        st.markdown(
+            f"**[{i}]** `{s['meta'].get('path', '?')}` — score={s['score']:.3f}"
+        )
         with st.expander(f"Preview {i}"):
             st.write(s["text"])
