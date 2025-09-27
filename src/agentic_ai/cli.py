@@ -15,6 +15,7 @@ app = typer.Typer(help="Agentic RAG CLI")
 def index(
     folder: str = typer.Option("data/raw", help="Folder containing docs to index")
 ):
+    print("Indexing folder:", folder)
     r = Retriever()
     r.index_folder(folder)
     print(":white_check_mark: [bold]Indexed[/bold]")

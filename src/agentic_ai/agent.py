@@ -1,38 +1,25 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 from typing import Any, Dict
 
 from .config import settings
-from .llm import ProviderRouter
-from .retriever import Retriever
-
+from .lc_pipeline import load_vectorstore, build_rag_chain
 
 @dataclass
 class ToolResult:
     name: str
     payload: Dict[str, Any]
 
-
 class Agent:
-    def __init__(self):
-        self.retriever = Retriever()
-        self.llm = ProviderRouter()
-
-    def _tool_retrieve(self, question: str, k: int) -> ToolResult:
-        hits = self.retriever.retrieve(question, k=k)
-        sources = [{"score": s, "text": d.text[:400], "meta": d.meta} for d, s in hits]
-        context = "\n\n".join(
-            [f"[Source {i}] {s['text']}" for i, s in enumerate(sources, 1)]
+    def __init__(self, db_type="faiss"):
+        self.vs = load_vectorstore(
+            db_type=db_type,
+            save_path=str(settings.index_path),
+            model_name=settings.embedding_model
         )
-        return ToolResult(
-            name="retrieve", payload={"context": context, "sources": sources}
-        )
+        self.llm = None  # Optionally set a custom LLM
 
     def ask(self, question: str, k: int = 5) -> Dict[str, Any]:
-        # Plan → Retrieve → Synthesize (simple, explicit chain for readability)
-        retrieve_res = self._tool_retrieve(question, k)
-        system = settings.system_prompt
-        user = f"Question: {question}\n\nContext:\n{retrieve_res.payload['context']}"
-        answer = self.llm.generate(system=system, user=user)
-        return {"answer": answer, "sources": retrieve_res.payload["sources"]}
+        rag_chain = build_rag_chain(self.vs, llm=self.llm, k=k)
+        answer = rag_chain.invoke(question)
+        # Optionally, extract sources from retriever if needed
+        return {"answer": answer.content if hasattr(answer, "content") else answer, "sources": []}
