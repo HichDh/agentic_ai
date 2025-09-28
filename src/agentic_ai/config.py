@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from pathlib import Path
 import os
+from pathlib import Path
+
+from pydantic import BaseModel, Field
+
 
 class Settings(BaseModel):
     # Paths
@@ -12,8 +14,8 @@ class Settings(BaseModel):
     generator_model: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 
     # Runtime/device
-    device: str = "auto"              # "auto" | "cpu" | "mps" | "cuda"
-    torch_dtype: str = "float32"      # "float32" or "bfloat16" (bf16 faster, try later)
+    device: str = "auto"  # "auto" | "cpu" | "mps" | "cuda"
+    torch_dtype: str = "float32"  # "float32" or "bfloat16" (bf16 faster, try later)
     attn_implementation: str | None = "sdpa"  # set to None if your stack complains
 
     # Generation defaults
